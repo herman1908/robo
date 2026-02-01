@@ -899,7 +899,7 @@ button:hover::before {
 /* From Uiverse.io by Smit-Prajapati */
 .parent {
   width: 300px;
-  padding: 20px;
+  padding: 5px;
   perspective: 1000px;
 }
 
@@ -937,7 +937,7 @@ button:hover::before {
 .content-box .card-title {
   display: inline-block;
   color: white;
-  font-size: 25px;
+  font-size: 40px;
   font-weight: 900;
   transition: all 0.5s ease-in-out;
   transform: translate3d(0px, 0px, 50px);
@@ -949,8 +949,8 @@ button:hover::before {
 
 .content-box .card-content {
   margin-top: 10px;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 100;
   color: #f2f2f2;
   transition: all 0.5s ease-in-out;
   transform: translate3d(0px, 0px, 30px);
