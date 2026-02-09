@@ -14,6 +14,96 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" />
+    
+    <!-- Dark Mode Styles -->
+    <style>
+      /* CSS Variables untuk Light dan Dark Mode */
+      :root {
+        --bg-color: #ffffff;
+        --text-color: #333333;
+        --navbar-bg: rgba(255, 255, 255, 0.95);
+        --card-bg: #ffffff;
+        --border-color: #dee2e6;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --hero-gradient-1: rgba(74, 144, 226, 0.1);
+        --hero-gradient-2: rgba(80, 227, 194, 0.1);
+      }
+      
+      [data-theme="dark"] {
+        --bg-color: #1a1a1a;
+        --text-color: #e0e0e0;
+        --navbar-bg: rgba(26, 26, 26, 0.95);
+        --card-bg: #2d2d2d;
+        --border-color: #404040;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --hero-gradient-1: rgba(74, 144, 226, 0.2);
+        --hero-gradient-2: rgba(80, 227, 194, 0.2);
+      }
+      
+      /* Apply theme colors */
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      .navbar {
+        background-color: var(--navbar-bg) !important;
+        transition: background-color 0.3s ease;
+      }
+      
+      .card, .service-card, .portfolio-item, .team-member, .stat-card {
+        background-color: var(--card-bg) !important;
+        color: var(--text-color) !important;
+        border-color: var(--border-color) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      .hero-section {
+        background: linear-gradient(135deg, var(--hero-gradient-1) 0%, var(--hero-gradient-2) 100%);
+      }
+      
+      [data-theme="dark"] .navbar-light .navbar-nav .nav-link {
+        color: var(--text-color) !important;
+      }
+      
+      [data-theme="dark"] .navbar-light .navbar-brand {
+        color: var(--text-color) !important;
+      }
+      
+      [data-theme="dark"] footer {
+        background-color: #0a0a0a !important;
+        color: var(--text-color);
+      }
+      
+      [data-theme="dark"] .form-control,
+      [data-theme="dark"] .input-group-text {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border-color: var(--border-color);
+      }
+      
+      #theme-toggle {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+      
+      #theme-toggle:hover {
+        transform: scale(1.1);
+      }
+      
+      [data-theme="dark"] #theme-toggle {
+        background-color: var(--card-bg);
+        border-color: var(--border-color);
+        color: #ffd700;
+      }
+    </style>
 
     <!-- View image share meta -->
      <!-- <meta property="og:title" content="Robo Komputer – Solusi All in One IT">
@@ -113,6 +203,11 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#contact">Kontak</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <button id="theme-toggle" class="btn btn-outline-secondary" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+              </button>
             </li>
             <li class="nav-item ms-lg-2">
               <a class="btn btn-primary" href="#contact">Konsultasi Gratis</a>
@@ -286,317 +381,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Slider Galeri Start -->
-       <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Product Slider | coding.pixel</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-<header>
-    <div class="logo">Lundev</div>
-    <nav>
-        <a href="">Home</a>
-        <a href="">Info</a>
-        <a href="">Contact</a>
-    </nav>
-</header>
-    <div class="carousel">
-        <div class="list">
-            <div class="item">
-                <img src="img/img1.jpeg">
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item">
-                <img src="img/img2.jpg" >
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item">
-                <img src="img/img3.jpg">
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item">
-                <img src="img/img4.jpg">
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item">
-                <img src="img/img5.jpg">
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item">
-                <img src="img/img6.jpeg">
-                <div class="introduce">
-                    <div class="title">DESIGN SLIDER</div>
-                    <div class="topic">Aerphone</div>
-                    <div class="des">
-                        <!-- 20 lorem -->
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, laborum cumque dignissimos quidem atque et eligendi aperiam voluptates beatae maxime.
-                    </div>
-                    <button class="seeMore">SEE MORE &#8599</button>
-                </div>
-                <div class="detail">
-                    <div class="title">Aerphone GHTK</div>
-                    <div class="des">
-                        <!-- lorem 50 -->
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, reiciendis suscipit nobis nulla animi, modi explicabo quod corrupti impedit illo, accusantium in eaque nam quia adipisci aut distinctio porro eligendi. Reprehenderit nostrum consequuntur ea! Accusamus architecto dolores modi ducimus facilis quas voluptatibus! Tempora ratione accusantium magnam nulla tenetur autem beatae.
-                    </div>
-                    <div class="specifications">
-                        <div>
-                            <p>Used Time</p>
-                            <p>6 hours</p>
-                        </div>
-                        <div>
-                            <p>Charging port</p>
-                            <p>Type-C</p>
-                        </div>
-                        <div>
-                            <p>Compatible</p>
-                            <p>Android</p>
-                        </div>
-                        <div>
-                            <p>Bluetooth</p>
-                            <p>5.3</p>
-                        </div>
-                        <div>
-                            <p>Controlled</p>
-                            <p>Touch</p>
-                        </div>
-                    </div>
-                    <div class="checkout">
-                        <button>ADD TO CART</button>
-                        <button>CHECKOUT</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="arrows">
-            <button id="prev"><</button>
-            <button id="next">></button>
-            <button id="back">See All  &#8599</button>
-        </div>
-    </div>
-
-
-
-    <script src="app.js"></script>
-
-<!-- akhir carosel ngambang -->
-
 
     <!-- Services Section -->
     <section id="services" class="services-section">
@@ -902,7 +686,7 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <h5><i class="fas fa-envelope text-primary me-2"></i> Email</h5>
-                    <p>herman.top1.asc@gmail.com</p>
+                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="375f52455a565919435847061956445477505a565e5b1954585a">[email&#160;protected]</a></p>
                   </div>
                   <div class="col-md-6 mb-3">
                     <h5><i class="fab fa-whatsapp text-primary me-2"></i> WhatsApp</h5>
@@ -964,7 +748,7 @@
               <ul>
                 <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Merpati B7, No.6, Tangerang</li>
                 <li><i class="fas fa-phone me-2"></i> +62 21 -</li>
-                <li><i class="fas fa-envelope me-2"></i> herman.top1.asc@gmail.com</li>
+                <li><i class="fas fa-envelope me-2"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e1ecfbe4e8e7a7fde6f9b8a7e8faeac9eee4e8e0e5a7eae6e4">[email&#160;protected]</a></li>
                 <li><i class="fab fa-whatsapp me-2"></i> +62 852-1675-8721</li>
               </ul>
             </div>
@@ -972,7 +756,7 @@
         </div>
         
         <!-- start goatcounter -->
-          <script data-goatcounter="https://robo.goatcounter.com/count"
+          <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-goatcounter="https://robo.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
         <!-- fin goatcounter -->
 
@@ -989,6 +773,42 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dark Mode Toggle Script -->
+    <script>
+      // Dark Mode Toggle Functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const html = document.documentElement;
+      
+      // Cek tema yang tersimpan di localStorage
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      
+      // Set tema awal
+      if (currentTheme === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      }
+      
+      // Toggle theme saat tombol diklik
+      themeToggle.addEventListener('click', function() {
+        const currentTheme = html.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+          html.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+          themeIcon.classList.remove('fa-sun');
+          themeIcon.classList.add('fa-moon');
+        } else {
+          html.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+        }
+      });
+    </script>
+    
     <!-- Custom JS -->
     <script src="script.js"></script>
 
@@ -997,20 +817,4 @@
       <script>
     window.addEventListener('load', function() {
       const loadingScreen = document.getElementById('loading-screen');
-      const mainContent = document.getElementById('main-content');
-      
-      // Tunggu beberapa saat untuk efek smooth (opsional)
-      setTimeout(() => {
-        loadingScreen.style.display = 'none';
-        mainContent.style.display = 'block';
-        }, 1000); // 1 detik delay
-      });
-      </script> 
-    <!-- End loading page Smoothing -->
-
-
-      
-
-
-  </body>
-</html>
+      const mainCon
