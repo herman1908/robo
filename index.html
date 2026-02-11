@@ -690,8 +690,39 @@
       </script> 
     <!-- End loading page Smoothing -->
 
+  <form id="contactForm">
+  <input type="text" id="nama" placeholder="Nama" required>
+  <input type="email" id="email" placeholder="Email" required>
+  <textarea id="pesan" placeholder="Pesan"></textarea>
+  <button type="submit">Kirim</button>
+</form>
+<!-- email to googlesheet -->
+       <!-- <script>
+                document.getElementById("contactForm").addEventListener("submit", function(e){
+                  e.preventDefault();
 
-      
+                  let nama  = document.getElementById("nama").value;
+                  let email = document.getElementById("email").value;
+                  let pesan = document.getElementById("pesan").value;
+
+                  let url = "https://script.google.com/macros/s/AKfycbwzCAjuMCkoRjlBv3q_9SpL1yYQRgoEs9htfMko1bMt59nviW0UWExOcMxn0WAdN8CfTw/exec"
+                          + "?nama=" + encodeURIComponent(nama)
+                          + "&email=" + encodeURIComponent(email)
+                          + "&pesan=" + encodeURIComponent(pesan);
+
+                  fetch(url)
+                    .then(res => res.text())
+                    .then(data => {
+                      console.log(data);
+                      alert("DATA MASUK GOOGLE SHEETS 🚀");
+                    })
+                    .catch(err => {
+                      console.error(err);
+                      alert("ERROR kirim data");
+                    });
+                });
+                </script> -->
+
 
 
   </body>
