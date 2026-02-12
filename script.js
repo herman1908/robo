@@ -70,47 +70,31 @@ function updateActiveNavLink() {
 }
 
 // Contact form submission
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+const contactForm = document.getElementById("contactForm");
 
-  // Get form values
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const subject = document.getElementById("subject").value;
-  const message = document.getElementById("message").value;
+if (contactForm) {
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  // Validate form
-  if (!name || !email || !subject || !message) {
-    showNotification("Harap lengkapi semua field!", "error");
-    return;
-  }
+    const name = document.getElementById("nama")?.value;
+    const email = document.getElementById("email")?.value;
+    const message = document.getElementById("pesan")?.value;
 
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    showNotification("Harap masukkan alamat email yang valid!", "error");
-    return;
-  }
+    if (!name || !email || !message) {
+      showNotification("Harap lengkapi semua field!", "error");
+      return;
+    }
 
-  // Show loading effect
-  const submitBtn = this.querySelector('button[type="submit"]');
-  const originalText = submitBtn.innerHTML;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Mengirim...';
-  submitBtn.disabled = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showNotification("Email tidak valid!", "error");
+      return;
+    }
 
-  // Simulate API call
-  setTimeout(() => {
-    // Show success message
-    showNotification(`Terima kasih ${name}! Pesan Anda telah berhasil dikirim. Kami akan menghubungi Anda di ${email} segera.`, "success");
-
-    // Reset form
-    document.getElementById("contactForm").reset();
-
-    // Reset button
-    submitBtn.innerHTML = originalText;
-    submitBtn.disabled = false;
-  }, 1500);
-});
+    showNotification("Pesan berhasil dikirim 🚀", "success");
+    this.reset();
+  });
+}
 
 // Custom carousel functionality
 function initializeCarousel() {
@@ -446,3 +430,36 @@ function debounce(func, wait = 10, immediate = true) {
 
 // Use debounce for scroll events
 window.addEventListener("scroll", debounce(animateOnScroll, 10));
+
+
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark-mode");
+  themeSwitch.checked = true;
+} else {
+  document.body.classList.add("light-mode");
+}
+
+themeSwitch.addEventListener("change", () => {
+  if (themeSwitch.checked) {
+    document.body.classList.remove("light-mode");
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.body.classList.remove("dark-mode");
+    document.body.classList.add("light-mode");
+    localStorage.setItem("theme", "light");
+  }
+});
+
+
+// Floating navbar on scroll
+window.addEventListener("scroll", () => {
+  const nav = document.querySelector(".navbar");
+  if (window.scrollY > 50) nav.classList.add("scrolled");
+  else nav.classList.remove("scrolled");
+});
+
+
+
