@@ -434,32 +434,32 @@ window.addEventListener("scroll", debounce(animateOnScroll, 10));
 
 
 // Load saved theme
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark-mode");
-  themeSwitch.checked = true;
-} else {
-  document.body.classList.add("light-mode");
-}
+// if (localStorage.getItem("theme") === "dark") {
+//   document.body.classList.add("dark-mode");
+//   themeSwitch.checked = true;
+// } else {
+//   document.body.classList.add("light-mode");
+// }
 
-themeSwitch.addEventListener("change", () => {
-  if (themeSwitch.checked) {
-    document.body.classList.remove("light-mode");
-    document.body.classList.add("dark-mode");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.body.classList.remove("dark-mode");
-    document.body.classList.add("light-mode");
-    localStorage.setItem("theme", "light");
-  }
-});
+// themeSwitch.addEventListener("change", () => {
+//   if (themeSwitch.checked) {
+//     document.body.classList.remove("light-mode");
+//     document.body.classList.add("dark-mode");
+//     localStorage.setItem("theme", "dark");
+//   } else {
+//     document.body.classList.remove("dark-mode");
+//     document.body.classList.add("light-mode");
+//     localStorage.setItem("theme", "light");
+//   }
+// });
 
 
-// Floating navbar on scroll
-window.addEventListener("scroll", () => {
-  const nav = document.querySelector(".navbar");
-  if (window.scrollY > 50) nav.classList.add("scrolled");
-  else nav.classList.remove("scrolled");
-});
+// // Floating navbar on scroll
+// window.addEventListener("scroll", () => {
+//   const nav = document.querySelector(".navbar");
+//   if (window.scrollY > 50) nav.classList.add("scrolled");
+//   else nav.classList.remove("scrolled");
+// });
 
 
 
