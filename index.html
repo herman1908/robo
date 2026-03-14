@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" />
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <!-- View image share meta -->
      <!-- <meta property="og:title" content="Robo Komputer – Solusi All in One IT">
@@ -615,6 +617,71 @@
         </div>
       </div>
     </section>
+
+
+    <!-- EMAILJS -->
+    <script>
+  emailjs.init("9-mpVr0AK3nAczCGF"); // ganti dengan Public Key kamu
+
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name    = document.getElementById("name").value.trim();
+    const email   = document.getElementById("email").value.trim();
+    const subject = document.getElementById("subject").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    // Validasi manual
+    if (!name || !email || !subject || !message) {
+      showAlert("Harap lengkapi semua field!", "danger");
+      return;
+    }
+
+    const btn = this.querySelector("button[type='submit']");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengirim...';
+
+    const templateParams = {
+      from_name:  name,
+      from_email: email,
+      subject:    subject,
+      message:    message,
+    };
+
+    emailjs
+      .send("service_b9ji9be", "template_dsz375l", templateParams) // ganti ID-nya
+      .then(() => {
+        showAlert("Pesan berhasil dikirim! Kami akan segera menghubungi Anda. ✅", "success");
+        document.getElementById("contactForm").reset();
+      })
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        showAlert("Gagal mengirim pesan. Silakan coba lagi atau hubungi via WhatsApp.", "danger");
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = "Kirim Pesan";
+      });
+  });
+
+  function showAlert(msg, type) {
+    // Hapus alert lama kalau ada
+    const existing = document.getElementById("formAlert");
+    if (existing) existing.remove();
+
+    const alert = document.createElement("div");
+    alert.id = "formAlert";
+    alert.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+    alert.innerHTML = `${msg} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+    document.getElementById("contactForm").after(alert);
+
+    // Auto-hilang setelah 5 detik
+    setTimeout(() => alert.remove(), 5000);
+  }
+</script>
+
+    <!-- END EmailJS -->
+
 
     <!-- Footer -->
     <footer>
