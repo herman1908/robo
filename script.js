@@ -81,7 +81,7 @@ if (contactForm) {
     const message = document.getElementById("pesan")?.value;
 
     if (!name || !email || !message) {
-      showNotification("Harap lengkapi semua field!", "error");
+      showNotification("Terima Kasih! email sedang di proses untuk dikirim.", "error");
       return;
     }
 
@@ -431,8 +431,6 @@ function debounce(func, wait = 10, immediate = true) {
 // Use debounce for scroll events
 window.addEventListener("scroll", debounce(animateOnScroll, 10));
 
-
-
 // Load saved theme
 // if (localStorage.getItem("theme") === "dark") {
 //   document.body.classList.add("dark-mode");
@@ -453,13 +451,9 @@ window.addEventListener("scroll", debounce(animateOnScroll, 10));
 //   }
 // });
 
-
 // // Floating navbar on scroll
 // window.addEventListener("scroll", () => {
 //   const nav = document.querySelector(".navbar");
 //   if (window.scrollY > 50) nav.classList.add("scrolled");
 //   else nav.classList.remove("scrolled");
 // });
-
-
-
