@@ -351,6 +351,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize portfolio modal
   initPortfolioModal();
 
+  // Initialize back to top button
+  initBackToTop();
+
   // Add click effect to social icons
   document.querySelectorAll(".social-icon").forEach((icon) => {
     icon.addEventListener("click", function (e) {
@@ -423,6 +426,24 @@ function initPortfolioModal() {
     if (e.key === "Escape" && modal.classList.contains("active")) {
       closeModal();
     }
+  });
+}
+
+// Back to Top button
+function initBackToTop() {
+  const btn = document.getElementById("backToTop");
+  if (!btn) return;
+
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 400) {
+      btn.classList.add("show");
+    } else {
+      btn.classList.remove("show");
+    }
+  });
+
+  btn.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
