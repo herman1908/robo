@@ -348,6 +348,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize scroll animations
   animateOnScroll();
 
+  // Initialize portfolio modal
+  initPortfolioModal();
+
   // Add click effect to social icons
   document.querySelectorAll(".social-icon").forEach((icon) => {
     icon.addEventListener("click", function (e) {
@@ -390,6 +393,38 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   document.head.appendChild(rippleStyles);
 });
+
+// Portfolio modal
+function initPortfolioModal() {
+  const modal = document.getElementById("portfolioModal");
+  const modalImg = document.getElementById("portfolioModalImg");
+  const closeBtn = document.getElementById("portfolioModalClose");
+
+  document.querySelectorAll(".portfolio-card").forEach((card) => {
+    card.addEventListener("click", function () {
+      const img = this.querySelector(".portfolio-img");
+      if (img) {
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  closeBtn.addEventListener("click", closeModal);
+  modal.querySelector(".portfolio-modal-overlay").addEventListener("click", closeModal);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal.classList.contains("active")) {
+      closeModal();
+    }
+  });
+}
 
 // WhatsApp button functionality
 document.querySelectorAll('a[href*="whatsapp"]').forEach((whatsappBtn) => {
