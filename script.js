@@ -266,13 +266,13 @@ function showNotification(message, type = "info") {
 
 // Parallax effect for hero section
 function initParallax() {
-  const heroSection = document.querySelector(".hero-section");
-  if (!heroSection) return;
+  const heroVisual = document.querySelector(".hero-visual");
+  if (!heroVisual) return;
 
   window.addEventListener("scroll", () => {
     const scrolled = window.pageYOffset;
-    const rate = scrolled * -0.5;
-    heroSection.style.backgroundPosition = `center ${rate}px`;
+    const rate = scrolled * 0.03;
+    heroVisual.style.transform = `translateY(${-rate}px)`;
   });
 }
 
