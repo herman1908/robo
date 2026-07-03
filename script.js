@@ -401,23 +401,78 @@ document.addEventListener("DOMContentLoaded", function () {
 function initPortfolioModal() {
   const modal = document.getElementById("portfolioModal");
   const modalImg = document.getElementById("portfolioModalImg");
+  const modalVideo = document.getElementById("portfolioModalVideo");
+  const modalMedia = document.getElementById("portfolioModalMedia");
   const closeBtn = document.getElementById("portfolioModalClose");
+  let isClosing = false;
+
+  function getVideoSrc(imgSrc) {
+    const fileName = imgSrc.split("/").pop();
+    const baseName = fileName.replace(/\.[^.]+$/, "");
+    const capName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+    return "vid/" + capName + ".mp4";
+  }
+
+  function resetMedia() {
+    modalMedia.classList.remove("playing");
+    modalVideo.classList.remove("show");
+    modalVideo.pause();
+    modalVideo.removeAttribute("src");
+    modalVideo.load();
+  }
 
   document.querySelectorAll(".portfolio-card").forEach((card) => {
     card.addEventListener("click", function () {
       const img = this.querySelector(".portfolio-img");
       if (img) {
+        resetMedia();
         modalImg.src = img.src;
         modalImg.alt = img.alt;
-        modal.classList.add("active");
+        modalVideo.dataset.src = getVideoSrc(img.src);
+        modal.style.display = "flex";
+        requestAnimationFrame(() => {
+          modal.classList.add("active");
+        });
         document.body.style.overflow = "hidden";
       }
     });
   });
 
+  modalMedia.addEventListener("click", function (e) {
+    if (e.target.closest(".portfolio-modal-close")) return;
+    if (modalMedia.classList.contains("playing")) return;
+    const videoSrc = modalVideo.dataset.src;
+    if (!videoSrc) return;
+    modalVideo.setAttribute("src", videoSrc);
+    modalVideo.load();
+    modalMedia.classList.add("playing");
+    modalVideo.classList.add("show");
+    modalVideo.play().catch(function () {});
+  });
+
+  modalVideo.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (!modalVideo.paused && !modalVideo.ended) {
+      modalVideo.pause();
+    } else {
+      modalVideo.play().catch(function () {});
+    }
+  });
+
+  modalVideo.addEventListener("ended", function () {
+    resetMedia();
+  });
+
   function closeModal() {
+    if (isClosing) return;
+    isClosing = true;
+    resetMedia();
     modal.classList.remove("active");
     document.body.style.overflow = "";
+    setTimeout(function () {
+      modal.style.display = "none";
+      isClosing = false;
+    }, 400);
   }
 
   closeBtn.addEventListener("click", closeModal);
