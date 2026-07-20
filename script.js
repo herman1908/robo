@@ -351,6 +351,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize portfolio modal
   initPortfolioModal();
 
+  // Initialize portfolio toggle
+  initPortfolioToggle();
+
   // Initialize back to top button
   initBackToTop();
 
@@ -396,6 +399,34 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   document.head.appendChild(rippleStyles);
 });
+
+// Portfolio description toggle (Lebih Banyak / Lebih Sedikit)
+function initPortfolioToggle() {
+  document.querySelectorAll(".portfolio-card").forEach((card) => {
+    const desc = card.querySelector(".portfolio-desc");
+    const toggle = card.querySelector(".portfolio-toggle");
+    if (!desc || !toggle) return;
+
+    function checkOverflow() {
+      if (desc.scrollHeight > desc.clientHeight) {
+        toggle.classList.add("show");
+      }
+    }
+
+    checkOverflow();
+
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (desc.classList.contains("expanded")) {
+        desc.classList.remove("expanded");
+        toggle.textContent = "Lebih Banyak...";
+      } else {
+        desc.classList.add("expanded");
+        toggle.textContent = "Lebih Sedikit";
+      }
+    });
+  });
+}
 
 // Portfolio modal
 function initPortfolioModal() {

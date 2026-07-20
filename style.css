@@ -1047,6 +1047,39 @@ h6 {
   z-index: 2;
 }
 
+.portfolio-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.portfolio-desc.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.portfolio-toggle {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: none;
+  transition: color 0.2s ease;
+}
+
+.portfolio-toggle:hover {
+  color: var(--dark-blue);
+}
+
+.portfolio-toggle.show {
+  display: inline-block;
+}
+
 /* Portfolio Modal */
 .portfolio-modal {
   display: none;
