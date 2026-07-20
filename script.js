@@ -409,8 +409,7 @@ function initPortfolioModal() {
   function getVideoSrc(imgSrc) {
     const fileName = imgSrc.split("/").pop();
     const baseName = fileName.replace(/\.[^.]+$/, "");
-    const capName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
-    return "vid/" + capName + ".mp4";
+    return "vid/" + baseName + ".mp4";
   }
 
   function resetMedia() {
