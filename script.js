@@ -343,6 +343,153 @@ function initParallax() {
       start();
     });
   }
+  const lightning = hero.querySelector(".hero-lightning");
+  const lctx = lightning ? lightning.getContext("2d") : null;
+  const touches = new Map();
+  let bolts = [], sparks = [], lRunning = false, lastBolt = 0, lastT = 0;
+  function sizeLightning() {
+    if (!lightning || !lctx) return;
+    const r = hero.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    lightning.width = Math.max(1, Math.round(r.width * dpr));
+    lightning.height = Math.max(1, Math.round(r.height * dpr));
+    lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  sizeLightning();
+  window.addEventListener("resize", sizeLightning);
+  function spawnBolt(x, y) {
+    const n = 2 + Math.floor(Math.random() * 2);
+    for (let b = 0; b < n; b++) {
+      const ang = Math.random() * Math.PI * 2;
+      const len = 46 + Math.random() * 90;
+      const segs = 5 + Math.floor(Math.random() * 4);
+      const pts = [{ x, y }];
+      for (let s = 1; s <= segs; s++) {
+        const t = s / segs;
+        const off = (Math.random() - 0.5) * 26 * (1 - t * 0.5);
+        const px = x + Math.cos(ang) * len * t + Math.cos(ang + Math.PI / 2) * off;
+        const py = y + Math.sin(ang) * len * t + Math.sin(ang + Math.PI / 2) * off;
+        pts.push({ x: px, y: py });
+      }
+      const cols = ["34,211,238", "129,140,248", "196,181,253"];
+      bolts.push({ pts, life: 1, decay: 0.06 + Math.random() * 0.08, w: 0.8 + Math.random() * 1.4, col: cols[Math.floor(Math.random() * cols.length)] });
+    }
+    if (bolts.length > 46) bolts = bolts.slice(-46);
+  }
+  function burst(x, y, k) {
+    for (let i = 0; i < k; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 1.2 + Math.random() * 3.4;
+      sparks.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 0.6, life: 1, decay: 0.03 + Math.random() * 0.05 });
+    }
+    if (sparks.length > 160) sparks = sparks.slice(-160);
+  }
+  function lightStart() {
+    if (!lRunning && lctx) { lRunning = true; lastT = performance.now(); requestAnimationFrame(lightLoop); }
+  }
+  function lightLoop(now) {
+    if (!lctx) { lRunning = false; return; }
+    const dt = Math.min(50, now - lastT);
+    lastT = now;
+    const r = hero.getBoundingClientRect();
+    lctx.clearRect(0, 0, r.width, r.height);
+    if (now - lastBolt > 55) {
+      lastBolt = now;
+      touches.forEach((p) => { spawnBolt(p.x, p.y); burst(p.x, p.y, 3); });
+    }
+    touches.forEach((p) => {
+      const g = lctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 64);
+      g.addColorStop(0, "rgba(255,255,255,0.85)");
+      g.addColorStop(0.25, "rgba(34,211,238,0.5)");
+      g.addColorStop(0.6, "rgba(129,140,248,0.18)");
+      g.addColorStop(1, "rgba(129,140,248,0)");
+      lctx.fillStyle = g;
+      lctx.beginPath();
+      lctx.arc(p.x, p.y, 64, 0, Math.PI * 2);
+      lctx.fill();
+      lctx.fillStyle = "rgba(255,255,255,0.95)";
+      lctx.beginPath();
+      lctx.arc(p.x, p.y, 3.2, 0, Math.PI * 2);
+      lctx.fill();
+    });
+    lctx.lineCap = "round";
+    lctx.lineJoin = "round";
+    bolts = bolts.filter((bt) => bt.life > 0);
+    bolts.forEach((bt) => {
+      bt.life -= bt.decay * (dt / 16.7);
+      const a = Math.max(0, bt.life);
+      lctx.shadowBlur = 14;
+      lctx.shadowColor = `rgba(${bt.col},0.9)`;
+      lctx.strokeStyle = `rgba(${bt.col},${(0.85 * a).toFixed(3)})`;
+      lctx.lineWidth = bt.w + 1.6;
+      lctx.beginPath();
+      bt.pts.forEach((p, i) => { if (i === 0) lctx.moveTo(p.x, p.y); else lctx.lineTo(p.x, p.y); });
+      lctx.stroke();
+      lctx.shadowBlur = 0;
+      lctx.strokeStyle = `rgba(255,255,255,${(0.9 * a).toFixed(3)})`;
+      lctx.lineWidth = Math.max(0.6, bt.w - 0.7);
+      lctx.stroke();
+    });
+    sparks = sparks.filter((s) => s.life > 0);
+    sparks.forEach((s) => {
+      s.life -= s.decay * (dt / 16.7);
+      s.x += s.vx * (dt / 16.7);
+      s.y += s.vy * (dt / 16.7);
+      s.vy += 0.05 * (dt / 16.7);
+      const a = Math.max(0, s.life);
+      lctx.fillStyle = `rgba(165,243,252,${a.toFixed(3)})`;
+      lctx.shadowBlur = 8;
+      lctx.shadowColor = "rgba(34,211,238,0.9)";
+      lctx.beginPath();
+      lctx.arc(s.x, s.y, 1.6, 0, Math.PI * 2);
+      lctx.fill();
+      lctx.shadowBlur = 0;
+    });
+    if (touches.size > 0 || bolts.length > 0 || sparks.length > 0) {
+      requestAnimationFrame(lightLoop);
+    } else {
+      lRunning = false;
+      if (lctx) lctx.clearRect(0, 0, r.width, r.height);
+    }
+  }
+  function trackFinger(x, y) {
+    const r = hero.getBoundingClientRect();
+    mxPx = x; myPx = y;
+    targetMX = x / (r.width || 1) - 0.5;
+    targetMY = y / (r.height || 1) - 0.5;
+    isHover = true; hoverT = 1;
+    start();
+  }
+  hero.addEventListener("pointerdown", (e) => {
+    if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+    const r = hero.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    touches.set(e.pointerId, { x, y });
+    trackFinger(x, y);
+    burst(x, y, 10);
+    lightStart();
+  }, { passive: true });
+  hero.addEventListener("pointermove", (e) => {
+    if (!touches.has(e.pointerId)) return;
+    const r = hero.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    touches.set(e.pointerId, { x, y });
+    trackFinger(x, y);
+    lightStart();
+  }, { passive: true });
+  function endTouch(e) {
+    touches.delete(e.pointerId);
+    if (touches.size === 0 && isTouch) { isHover = false; hoverT = 0; }
+  }
+  hero.addEventListener("pointerup", endTouch, { passive: true });
+  hero.addEventListener("pointercancel", endTouch, { passive: true });
+  hero.addEventListener("touchmove", (e) => {
+    const r = hero.getBoundingClientRect();
+    const t = e.touches[0];
+    if (!t) return;
+    trackFinger(t.clientX - r.left, t.clientY - r.top);
+    lightStart();
+  }, { passive: true });
   function loop(t) {
     rafId = requestAnimationFrame(loop);
     const y = window.pageYOffset || window.scrollY || 0;
