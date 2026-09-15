@@ -264,16 +264,182 @@ function showNotification(message, type = "info") {
   });
 }
 
-// Parallax effect for hero section
 function initParallax() {
-  const heroVisual = document.querySelector(".hero-visual");
-  if (!heroVisual) return;
-
-  window.addEventListener("scroll", () => {
-    const scrolled = window.pageYOffset;
-    const rate = scrolled * 0.03;
-    heroVisual.style.transform = `translateY(${-rate}px)`;
-  });
+  const hero = document.querySelector(".hero-section");
+  if (!hero) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  hero.classList.add("js-parallax");
+  const bg = hero.querySelector(".hero-bg");
+  const bgImg = hero.querySelector("[data-parallax-bg]");
+  const tilt = hero.querySelector("#heroTilt");
+  const content = hero.querySelector(".hero-content");
+  const visual = hero.querySelector(".hero-visual");
+  const card = hero.querySelector("#heroCard");
+  const glare = hero.querySelector(".hero-card-glare");
+  const spotlight = hero.querySelector(".hero-spotlight");
+  const shapes = hero.querySelectorAll(".hero-shape");
+  const orbs = hero.querySelectorAll(".hero-orb");
+  const particles = hero.querySelector(".hero-particles");
+  const chips = hero.querySelectorAll(".hero-chip");
+  const rings = hero.querySelectorAll(".hero-glow-ring");
+  const buttons = hero.querySelectorAll(".hero-buttons .btn");
+  const isTouch = window.matchMedia("(hover: none)").matches;
+  let targetScroll = 0, curScroll = 0;
+  let targetMX = 0, targetMY = 0, curMX = 0, curMY = 0;
+  let targetGX = 50, targetGY = 50, curGX = 50, curGY = 50;
+  let heroTop = 0, heroH = 1, running = false, rafId = null;
+  let mxPx = window.innerWidth / 2, myPx = window.innerHeight / 3;
+  let dots = [], isHover = false, hoverT = 0, hoverC = 0;
+  function cacheDots() {
+    const hr = hero.getBoundingClientRect();
+    dots = Array.from(hero.querySelectorAll(".hero-dot")).map((el, i) => {
+      const r = el.getBoundingClientRect();
+      return { el, bx: r.left - hr.left + r.width / 2, by: r.top - hr.top + r.height / 2, cx: 0, cy: 0, s: 0.22 + (i % 4) * 0.08 };
+    });
+  }
+  function measure() {
+    heroTop = hero.offsetTop;
+    heroH = hero.offsetHeight || 1;
+  }
+  measure();
+  cacheDots();
+  setTimeout(cacheDots, 500);
+  window.addEventListener("resize", () => { measure(); cacheDots(); });
+  function start() {
+    if (!running) { running = true; rafId = requestAnimationFrame(loop); }
+  }
+  function onScroll() {
+    const y = window.pageYOffset || window.scrollY || 0;
+    targetScroll = Math.max(0, y - heroTop);
+    const visible = y < heroTop + heroH + 120;
+    if (visible) start();
+  }
+  if (!isTouch) {
+    hero.addEventListener("mousemove", (e) => {
+      const r = hero.getBoundingClientRect();
+      targetMX = (e.clientX - r.left) / r.width - 0.5;
+      targetMY = (e.clientY - r.top) / r.height - 0.5;
+      mxPx = e.clientX - r.left;
+      myPx = e.clientY - r.top;
+      isHover = true;
+      hoverT = 1;
+      if (card) {
+        const cr = card.getBoundingClientRect();
+        targetGX = Math.min(100, Math.max(0, ((e.clientX - cr.left) / (cr.width || 1)) * 100));
+        targetGY = Math.min(100, Math.max(0, ((e.clientY - cr.top) / (cr.height || 1)) * 100));
+      }
+      start();
+    });
+    hero.addEventListener("mouseleave", () => {
+      targetMX = 0; targetMY = 0; targetGX = 50; targetGY = 50;
+      isHover = false;
+      hoverT = 0;
+    });
+  } else if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", (e) => {
+      if (e.gamma == null || e.beta == null) return;
+      targetMX = Math.min(0.5, Math.max(-0.5, e.gamma / 45));
+      targetMY = Math.min(0.5, Math.max(-0.5, (e.beta - 45) / 45));
+      start();
+    });
+  }
+  function loop(t) {
+    rafId = requestAnimationFrame(loop);
+    const y = window.pageYOffset || window.scrollY || 0;
+    if (y > heroTop + heroH + 200) { running = false; cancelAnimationFrame(rafId); rafId = null; return; }
+    curScroll += (targetScroll - curScroll) * 0.085;
+    curMX += (targetMX - curMX) * 0.065;
+    curMY += (targetMY - curMY) * 0.065;
+    curGX += (targetGX - curGX) * 0.12;
+    curGY += (targetGY - curGY) * 0.12;
+    if (Math.abs(targetScroll - curScroll) < 0.05) curScroll = targetScroll;
+    const time = (t || 0) / 1000;
+    const p = Math.min(curScroll / heroH, 1.4);
+    const breathe = 1.18 + Math.sin(time * 0.6) * 0.015;
+    if (bg) bg.style.transform = `translate3d(0, ${(curScroll * 0.22).toFixed(2)}px, -60px)`;
+    if (bgImg) bgImg.style.transform = `translate3d(${(curMX * -46).toFixed(2)}px, ${(curScroll * 0.34 + curMY * -30 + Math.sin(time * 0.5) * 8).toFixed(2)}px, 0) scale(${breathe.toFixed(4)})`;
+    if (spotlight) {
+      spotlight.style.setProperty("--mx", mxPx.toFixed(1) + "px");
+      spotlight.style.setProperty("--my", myPx.toFixed(1) + "px");
+      spotlight.style.transform = `translate3d(0, ${(curScroll * 0.15).toFixed(2)}px, 0)`;
+      spotlight.style.opacity = (1 - p * 0.8).toFixed(3);
+    }
+    if (tilt) tilt.style.transform = `rotateY(${(curMX * 7).toFixed(3)}deg) rotateX(${(-curMY * 7).toFixed(3)}deg) translate3d(0, ${(curScroll * 0.06).toFixed(2)}px, 0)`;
+    shapes.forEach((el, i) => {
+      const d = parseFloat(el.dataset.depth || 0.1);
+      const fx = Math.sin(time * (0.7 + i * 0.18) + i * 1.7) * (10 + i * 4);
+      const fy = Math.cos(time * (0.6 + i * 0.15) + i * 2.1) * (12 + i * 5);
+      el.style.transform = `translate3d(${(curMX * d * 420 + fx).toFixed(2)}px, ${(curScroll * d * 2.6 + curMY * d * 420 + fy).toFixed(2)}px, ${(d * 300).toFixed(0)}px) rotate(${(curMX * 24 + Math.sin(time * 0.5 + i) * 8).toFixed(2)}deg) scale(${(1 + Math.sin(time * 0.8 + i * 2) * 0.08).toFixed(3)})`;
+    });
+    orbs.forEach((el, i) => {
+      const d = parseFloat(el.dataset.depth || 0.1);
+      const fx = Math.sin(time * 0.45 + i * 2.4) * 22;
+      const fy = Math.cos(time * 0.4 + i * 1.8) * 26;
+      el.style.transform = `translate3d(${(curMX * d * -520 + fx).toFixed(2)}px, ${(curScroll * d * 1.8 + curMY * d * -520 + fy).toFixed(2)}px, ${(d * 200).toFixed(0)}px) scale(${(1 + Math.sin(time * 0.55 + i) * 0.1).toFixed(3)})`;
+      el.style.opacity = (0.9 - p * 0.5).toFixed(3);
+    });
+    hoverC += (hoverT - hoverC) * 0.06;
+    if (Math.abs(hoverT - hoverC) < 0.001) hoverC = hoverT;
+    if (particles) particles.style.transform = `translate3d(${(curMX * 20).toFixed(2)}px, ${(curScroll * 0.28 + curMY * 14).toFixed(2)}px, 40px)`;
+    dots.forEach((d, i) => {
+      const dx = mxPx - d.bx;
+      const dy = myPx - d.by;
+      const dist = Math.hypot(dx, dy) || 1;
+      const maxPull = 130;
+      let tx = dx * d.s * hoverC;
+      let ty = dy * d.s * hoverC;
+      const tl = Math.hypot(tx, ty);
+      if (tl > maxPull) { tx = (tx / tl) * maxPull; ty = (ty / tl) * maxPull; }
+      const ix = Math.sin(time * (0.9 + i * 0.12) + i * 1.3) * 12 * (1 - hoverC * 0.55);
+      const iy = Math.cos(time * (0.8 + i * 0.1) + i) * 16 * (1 - hoverC * 0.55);
+      d.cx += (tx + ix - d.cx) * 0.085;
+      d.cy += (ty + iy - d.cy) * 0.085;
+      const near = Math.max(0, 1 - Math.min(dist / 480, 1));
+      const glow = hoverC * near;
+      const sc = (1 + Math.sin(time * 1.4 + i * 1.7) * 0.3 + glow * 1.6 + hoverC * 0.35).toFixed(3);
+      d.el.style.transform = `translate(${d.cx.toFixed(2)}px, ${d.cy.toFixed(2)}px) scale(${sc})`;
+      d.el.style.opacity = (0.45 + glow * 0.55 + hoverC * 0.15).toFixed(3);
+      d.el.style.background = glow > 0.35 ? "rgba(34,211,238,0.95)" : glow > 0.12 ? "rgba(129,140,248,0.9)" : "";
+      d.el.style.boxShadow = `0 0 ${(8 + glow * 22).toFixed(0)}px rgba(34,211,238,${(0.4 + glow * 0.6).toFixed(3)})`;
+    });
+    rings.forEach((ring, i) => {
+      const s = 1 + Math.sin(time * 1.1 + i * 2) * 0.06;
+      ring.style.transform = `translate3d(${(curMX * (14 + i * 10)).toFixed(2)}px, ${(curMY * (14 + i * 10)).toFixed(2)}px, 0) scale(${s.toFixed(3)}) rotate(${(time * 8 + i * 40).toFixed(2)}deg)`;
+    });
+    if (content) {
+      content.style.transform = `translate3d(${(curMX * 22 + Math.sin(time * 0.6) * 4).toFixed(2)}px, ${(curScroll * 0.14 + curMY * 14 + Math.cos(time * 0.55) * 5).toFixed(2)}px, 50px) rotateY(${(curMX * 4).toFixed(3)}deg)`;
+      content.style.opacity = Math.max(0, 1 - p * 1).toFixed(3);
+    }
+    if (visual) {
+      visual.style.transform = `translate3d(${(curMX * -38 + Math.sin(time * 0.65 + 1) * 6).toFixed(2)}px, ${(curScroll * -0.08 + curMY * -24 + Math.cos(time * 0.7) * 9).toFixed(2)}px, 90px)`;
+      visual.style.opacity = Math.max(0, 1 - p * 0.75).toFixed(3);
+    }
+    if (card) {
+      const floatY = Math.sin(time * 1.2) * 10;
+      const floatR = Math.sin(time * 0.9) * 1.4;
+      card.style.transform = `rotateY(${(curMX * 16).toFixed(3)}deg) rotateX(${(-curMY * 14).toFixed(3)}deg) translateZ(46px) translateY(${floatY.toFixed(2)}px) rotateZ(${floatR.toFixed(3)}deg)`;
+      card.style.boxShadow = `${(-curMX * 26).toFixed(1)}px ${(22 + -curMY * 22).toFixed(1)}px 70px rgba(0,0,0,0.45), 0 0 ${(34 + Math.abs(curMX) * 40).toFixed(0)}px rgba(99,102,241,${(0.22 + Math.abs(curMX) * 0.25).toFixed(3)})`;
+      card.style.setProperty("--gx", curGX.toFixed(1) + "%");
+      card.style.setProperty("--gy", curGY.toFixed(1) + "%");
+      const hover = Math.abs(curMX) + Math.abs(curMY) > 0.02 ? 1 : 0;
+      card.style.setProperty("--glare-o", hover ? 1 : 0);
+      if (glare) glare.style.opacity = hover ? 1 : 0;
+    }
+    chips.forEach((chip, i) => {
+      const d = parseFloat(chip.dataset.depth || 0.2);
+      const fx = Math.sin(time * 1.3 + i * 2.2) * 12;
+      const fy = Math.cos(time * 1.15 + i * 1.6) * 14;
+      chip.style.transform = `translate3d(${(curMX * d * 320 + fx).toFixed(2)}px, ${(curMY * d * 320 + fy + curScroll * -0.12).toFixed(2)}px, ${(120 + d * 300).toFixed(0)}px) rotateY(${(curMX * 18).toFixed(2)}deg) rotate(${(Math.sin(time * 0.8 + i) * 4).toFixed(2)}deg)`;
+      chip.style.opacity = Math.max(0, 1 - p * 0.85).toFixed(3);
+    });
+    buttons.forEach((btn, i) => {
+      const m = i === 0 ? 10 : 14;
+      btn.style.transform = `translate3d(${(curMX * m).toFixed(2)}px, ${(curMY * m).toFixed(2)}px, 30px)`;
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  start();
 }
 
 // Typing effect for hero title (optional)
